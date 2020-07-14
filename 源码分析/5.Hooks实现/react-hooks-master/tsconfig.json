@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "jsx": "react",
+    "strict": true
+  },
+  "include": [
+    "src/**.tsx",
+    "src/**.ts",
+    "test/**.ts",
+    "test/**.tsx",
+  ]
+}

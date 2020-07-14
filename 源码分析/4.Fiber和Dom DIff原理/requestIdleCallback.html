@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>源码分析课程</title>
+  </head>
+  <body>
+    <script>
+      //知识点1 ==> requestIdleCallback
+      //调用时机是在回调注册完成的上一帧渲染到下一帧渲染之间的空闲时间执行
+      // const idleCallbackId = window.requestIdleCallback(
+      //   function(deadline) {
+      //     //剩余时间，单位 ms，指的是该帧剩余时间
+      //     console.log(deadline.timeRemaining());
+      //     //表示该帧里面没有执行回调，超时了。
+      //     console.log(deadline.didTimeout);
+      //   },
+      //   {
+      //     //1.即超时时间， 不提供浏览器自己去计算
+      //     //2.如果给定 timeout，那到了时间，不管有没有剩余时间，都会立刻执行回调 callback。
+      //     timeout: 1000
+      //   }
+      // );
+      // //结束requestIdleCallback
+      // window.cancelIdleCallback(idleCallbackId); 
+      //=====================================================================
+      //知识点2
+      //这个是浏览器内置的时钟，从页面加载开始计时，返回到当前的总时间，单位ms。
+      // console.log(window.performance.now);
+
+      //=====================================================================
+      //知识点3 ==> requestAnimationFrame 只有激活的时候才能使用可以大大节省CPU开销
+      //可以理解为系统在调用回调前立马执行了一下performance.now()传给了回调当参数。这样我们就可以在执行回调的时候知道当前的执行时间了。
+      // requestAnimationFrame(function F(t) {
+      //   //会不断打印执行回调的时间，如果刷新频率为60Hz，则相邻的t间隔时间大约为1000/60 = 16.7ms
+      //   console.log(t, "====");
+      //   requestAnimationFrame(F);
+      // });
+
+      //=====================================================================
+      //知识点3 ==> MessageChannel创建了一个通信的管道，这个管道有两个端口，
+      //每个端口都可以通过postMessage发送数据，而一个端口只要绑定了onmessage回调方法，
+      //就可以接收从另一个端口传过来的数据。
+      var channel = new MessageChannel();
+        var port1 = channel.port1;
+        var port2 = channel.port2;
+        port1.onmessage = function(event) {
+            console.log("port1收到来自port2的数据：" + event.data);
+        }
+        port2.onmessage = function(event) {
+            console.log("port2收到来自port1的数据：" + event.data);
+        }
+
+        port1.postMessage("发送给port2");
+        port2.postMessage("发送给port1");
+    </script>
+  </body>
+</html>

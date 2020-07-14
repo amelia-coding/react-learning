@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>源码分析课程</title>
+  </head>
+  <body>
+    <script>
+      //知识点3 ==> requestAnimationFrame 只有激活的时候才能使用可以大大节省CPU开销
+      //可以理解为系统在调用回调前立马执行了一下performance.now()传给了回调当参数。这样我们就可以在执行回调的时候知道当前的执行时间了。
+      requestAnimationFrame(function F(t) {
+        //会不断打印执行回调的时间，如果刷新频率为60Hz，则相邻的t间隔时间大约为1000/60 = 16.7ms
+        console.log(Math.random());
+        console.log(t, "====");
+        requestAnimationFrame(F);
+      });
+    </script>
+  </body>
+</html>
